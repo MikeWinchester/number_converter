@@ -78,19 +78,19 @@ async def convertir_texto(entrada: EntradaTexto):
         # 1. ANÁLISIS LÉXICO
         lexer = ConvertidorLexer()
         tokens = lexer.tokenize(texto)
-        
+
         analisis_lexico = AnalisisLexico(tokens=tokens)
-        
+
         # 2. ANÁLISIS SINTÁCTICO
         parser = ConvertidorParser()
-        conversiones, errores = parser.parse(texto)
-        
+        conversiones, errores = parser.parse(texto, lexer)  # ← CORREGIDO
+
         if errores:
             raise HTTPException(
                 status_code=400,
                 detail=f"Errores de sintaxis encontrados: {'; '.join(errores)}"
             )
-        
+
         analisis_sintactico = AnalisisSintactico(conversiones=conversiones)
         
         # 3. CONSTRUCCIÓN DEL ÁRBOL con LARK
